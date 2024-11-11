@@ -157,7 +157,7 @@ public class CalculoBonoDeSueldo {
                                    sumaDeducciones += Double.parseDouble(bonoCalculado[x][3]);
                                    deduccionesIngresadas[x][0] = deducciones[i][0];
                                    deduccionesIngresadas[x][1] = deducciones[i][1];
-                                   deduccionesIngresadas[x][2] = bonoCalculado[x][3];
+                                   deduccionesIngresadas[x][3] = bonoCalculado[x][3];
                                } else {
                                    bonoCalculado[x][0] = deducciones[i][0];
                                    bonoCalculado[x][1] = deducciones[i][1];
@@ -167,7 +167,7 @@ public class CalculoBonoDeSueldo {
                                    sumaDeducciones += monto;
                                    deduccionesIngresadas[x][0] = deducciones[i][0];
                                    deduccionesIngresadas[x][1] = deducciones[i][1];
-                                   deduccionesIngresadas[x][2] = bonoCalculado[x][3];
+                                   deduccionesIngresadas[x][3] = bonoCalculado[x][3];
                                }
                                break;
                            }
