@@ -34,7 +34,7 @@ public class Validaciones {
 
     }
 
-    public boolean validarColumna(String[][] matriz,int columna, String valor){
+    public boolean validarInColumna(String[][] matriz,int columna, String valor){
         boolean encontrado=false;
 
         for (int i = 0; i < matriz.length; i++) {
@@ -46,7 +46,7 @@ public class Validaciones {
         return encontrado;
     }
 
-    public boolean validarFila(String[][] matriz,int fila, String valor){
+    public boolean validarInFila(String[][] matriz,int fila, String valor){
         boolean encontrado=false;
 
         for (int i = 0; i < matriz[0].length; i++) {

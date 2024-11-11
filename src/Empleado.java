@@ -16,6 +16,14 @@ public class Empleado {
     private double salarioBasico;
     private List<BonoSueldo> bonos;
 
+    public List<BonoSueldo> getBonos() {
+        return bonos;
+    }
+
+    public void setBonos(List<BonoSueldo> bonos) {
+        this.bonos = bonos;
+    }
+
     public String getNombreEmpleado() {
         return nombreEmpleado;
     }

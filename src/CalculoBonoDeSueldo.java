@@ -11,6 +11,7 @@ public class CalculoBonoDeSueldo {
         int anioFact = 0;
         double sumaHaberes=0;
         double sumaDeducciones=0;
+        String item = "";
 
 
         String[][] haberes = {{"100", "Presentismo", "9"}, {"101", "Titulo Profesional", "9"},
@@ -22,6 +23,8 @@ public class CalculoBonoDeSueldo {
 
         HashSet<Integer> codigosIngresados = new HashSet<>();
 
+        ArrayList<String>bonosCalculados = new ArrayList<>();
+
         /// CREO EMPLEADOO **************************
 
         Empleado elRulo = new Empleado();
@@ -29,6 +32,7 @@ public class CalculoBonoDeSueldo {
         elRulo.crearEmpleado();
 
        while (true) {
+
 
            do {
                System.out.println("ingrese año de facturacion");
@@ -42,24 +46,22 @@ public class CalculoBonoDeSueldo {
                val.validar(mesFact);
            } while (!val.validar(mesFact));
 
+
+
            BonoSueldo bonoSueldo = new BonoSueldo();
-           bonoSueldo.setEmpleado(elRulo.getNombreEmpleado());
+           bonoSueldo.setEmpleado(elRulo);
            bonoSueldo.setAnioLiquidacion(anioFact);
            bonoSueldo.setMesLiquidacion(mesFact);
 
 
            String[][] bonoCalculado = new String[10][4];
 
-           bonoCalculado[0][0] = "CODIGO ITEM";
-           bonoCalculado[0][1] = "DENOMINACION";
-           bonoCalculado[0][2] = "HABERES";
-           bonoCalculado[0][3] = "DEDUCCIONES";
 
-           String item = "";
-           int x = 1;
+           int x = 0;
 
 
            System.out.println("Ingrese los haberes del empleado");
+           String[][] haberesIngresados = new String[5][4];
 
            while (true) {
 
@@ -90,6 +92,9 @@ public class CalculoBonoDeSueldo {
                                    bonoCalculado[x][1] = haberes[i][1];
                                    bonoCalculado[x][2] = String.valueOf((Double.parseDouble(haberes[i][2]) / 100 )* elRulo.getSalarioBasico());
                                    sumaHaberes = sumaHaberes + Double.parseDouble(bonoCalculado[x][2]);
+                                   haberesIngresados[x][0] = haberes[i][0];
+                                   haberesIngresados[x][1] = haberes[i][1];
+                                   haberesIngresados[x][2] = bonoCalculado[x][2];
 
                                } else {
                                    bonoCalculado[x][0] = haberes[i][0];
@@ -98,13 +103,16 @@ public class CalculoBonoDeSueldo {
                                    double monto = Double.parseDouble(sc.next());
                                    bonoCalculado[x][2] = String.valueOf((double) monto);
                                    sumaHaberes = sumaHaberes + monto;
+                                   haberesIngresados[x][0] = haberes[i][0];
+                                   haberesIngresados[x][1] = haberes[i][1];
+                                   haberesIngresados[x][2] = bonoCalculado[x][2];
 
                                }
 
                                break;
                            }
                        }
-                       x = x + 1;
+                       x++;
                    }
 
                } else {
@@ -117,6 +125,7 @@ public class CalculoBonoDeSueldo {
            System.out.println(" ************************************************************************");
 
            System.out.println("\ningrese las deducciones del empleado");
+           String[][] deduccionesIngresadas = new String[5][4];
 
            while (true) {
                System.out.println("Ingrese código del ítem o ingrese 000 para finalizar la carga de deducciones");
@@ -146,6 +155,9 @@ public class CalculoBonoDeSueldo {
                                    bonoCalculado[x][1] = deducciones[i][1];
                                    bonoCalculado[x][3] = String.valueOf(Double.parseDouble(deducciones[i][2]) / 100 * elRulo.getSalarioBasico());
                                    sumaDeducciones += Double.parseDouble(bonoCalculado[x][3]);
+                                   deduccionesIngresadas[x][0] = deducciones[i][0];
+                                   deduccionesIngresadas[x][1] = deducciones[i][1];
+                                   deduccionesIngresadas[x][2] = bonoCalculado[x][3];
                                } else {
                                    bonoCalculado[x][0] = deducciones[i][0];
                                    bonoCalculado[x][1] = deducciones[i][1];
@@ -153,6 +165,9 @@ public class CalculoBonoDeSueldo {
                                    double monto = Double.parseDouble(sc.next());
                                    bonoCalculado[x][3] = String.valueOf(monto);
                                    sumaDeducciones += monto;
+                                   deduccionesIngresadas[x][0] = deducciones[i][0];
+                                   deduccionesIngresadas[x][1] = deducciones[i][1];
+                                   deduccionesIngresadas[x][2] = bonoCalculado[x][3];
                                }
                                break;
                            }
@@ -164,36 +179,19 @@ public class CalculoBonoDeSueldo {
                }
            }
 
+           bonoSueldo.setDeducciones(deduccionesIngresadas);
+           bonoSueldo.setHaberes(haberesIngresados);
+
 
 
            double liquidacionFinal = (elRulo.getSalarioBasico() + elRulo.getMontoAntiguedad() + sumaHaberes) - sumaDeducciones;
+           bonoSueldo.setSumaDeducciones(sumaDeducciones);
+           bonoSueldo.setSumaHaberes(sumaHaberes);
 
            bonoSueldo.setMontoLiquidacion(liquidacionFinal);
            elRulo.agregarBono(bonoSueldo);
 
-           String[][] bonoEncabezado = {{"NOMBRE", elRulo.getNombreEmpleado(), "", ""},
-                   {"CUIL", String.valueOf(elRulo.getCuil()), "", ""},
-                   {"MES LIQUIDACION", String.valueOf(mesFact), "AÑO LIQUIDACION", String.valueOf(anioFact)},
-                   {"SUELDO BASICO", String.valueOf(elRulo.getSalarioBasico()), "AÑO INGRESO", String.valueOf(elRulo.getAnioIngreso())}
 
-           };
-
-           val.validarNull(bonoCalculado);
-
-           for (String[] fila : bonoEncabezado) {
-
-               System.out.printf("%-15s %-40s %-15s %-15s%n", fila[0], fila[1], fila[2], fila[3]);
-
-           }
-
-           for (String[] fila : bonoCalculado) {
-               if (!fila[0].equals("XXXXXXX")) {
-                   System.out.printf("%-15s %-40s %-15s %-15s%n", fila[0], fila[1], fila[2], fila[3]);
-
-               }
-           }
-           System.out.printf("%-15s %-40s %-15s %-15s%n", "", "SUB TOTAL", sumaHaberes, sumaDeducciones);
-           System.out.printf("%-15s %-40s %-15s %-15s%n", "", "", "TOTAL", liquidacionFinal);
 
            int opcion = 0;
            while (true) {
@@ -203,12 +201,18 @@ public class CalculoBonoDeSueldo {
                opcion = Integer.parseInt(sc.next());
 
                if (opcion==1||opcion==2) {
+                   codigosIngresados.clear();
                    break;
                }else {
                    System.out.println("error: Opcion invalida");
                }
            }
            if (opcion==2) {
+               for(BonoSueldo bono:elRulo.getBonos()){
+                   bono.mostrarBonoSueldo();
+
+               }
+
                break;
            }
 
